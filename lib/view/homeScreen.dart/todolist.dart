@@ -35,13 +35,11 @@ class _ListviewState extends State<Listview> {
               style: isChecked == false
                   ? TextStyle(color: Colors.black, fontSize: 20)
                   : TextStyle(
-                      color: Colors.black,
+                      color: Colors.red,
                       decoration: TextDecoration.lineThrough,
                       fontSize: 20),
             ),
           ),
-          isChecked == false ? Text("Incompleted") : Text("Completed"),
-          Spacer(),
           IconButton(onPressed: widget.onDelete, icon: Icon(Icons.delete))
         ],
       ),
