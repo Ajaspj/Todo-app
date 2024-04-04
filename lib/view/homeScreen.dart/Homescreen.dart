@@ -42,12 +42,12 @@ class _HomeScreenState extends State<HomeScreen> {
                           },
                         ),
                     separatorBuilder: (context, index) => SizedBox(
-                          height: 20,
+                          height: 5,
                         ),
                     itemCount: TodoController.todolistKey.length),
               ),
               Container(
-                margin: EdgeInsets.symmetric(vertical: 50, horizontal: 110),
+                margin: EdgeInsets.symmetric(vertical: 30, horizontal: 110),
                 padding: EdgeInsets.all(5),
                 decoration: BoxDecoration(
                     color: Colors.grey,
@@ -57,30 +57,18 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     Expanded(
                       child: Center(
-                        child: Text("Add new",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 20)),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    CircleAvatar(
-                      radius: 20,
-                      child: IconButton(
-                          onPressed: () {
+                        child: InkWell(
+                          onTap: () {
                             AddController.clear();
                             showDialog(
                               context: context,
                               builder: (context) => AlertDialog(
-                                title: Text("Add"),
+                                title: Text("Add new"),
                                 content: Form(
-                                  key: formKey,
-                                  child: TextFormField(
-                                    controller: AddController,
-                                  ),
-                                ),
+                                    key: formKey,
+                                    child: TextFormField(
+                                      controller: AddController,
+                                    )),
                                 actions: [
                                   TextButton(
                                       onPressed: () async {
@@ -98,7 +86,17 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             );
                           },
-                          icon: Icon(Icons.add)),
+                          child: Center(
+                            child: Text("Add new",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 20)),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 10,
                     ),
                   ],
                 ),

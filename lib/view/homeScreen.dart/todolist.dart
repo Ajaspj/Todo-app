@@ -26,18 +26,15 @@ class _ListviewState extends State<Listview> {
               });
             },
           ),
-          SizedBox(
-            width: 20,
-          ),
           Expanded(
             child: Text(
               TodoController.getdata(widget.todoitemKey)!.title.toString(),
               style: isChecked == false
-                  ? TextStyle(color: Colors.black, fontSize: 20)
+                  ? TextStyle(color: Colors.black, fontSize: 18)
                   : TextStyle(
                       color: Colors.red,
                       decoration: TextDecoration.lineThrough,
-                      fontSize: 20),
+                      fontSize: 15),
             ),
           ),
           IconButton(onPressed: widget.onDelete, icon: Icon(Icons.delete))
