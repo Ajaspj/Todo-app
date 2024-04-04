@@ -24,7 +24,15 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
         appBar: AppBar(
           leading: Icon(Icons.arrow_back),
-          actions: [Icon(Icons.search)],
+          actions: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Icon(
+                Icons.search,
+                size: 30,
+              ),
+            )
+          ],
         ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),

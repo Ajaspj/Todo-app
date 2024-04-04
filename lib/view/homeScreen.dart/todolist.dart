@@ -37,6 +37,18 @@ class _ListviewState extends State<Listview> {
                       fontSize: 15),
             ),
           ),
+          isChecked == false
+              ? Icon(
+                  Icons.pending_actions,
+                  color: Colors.red,
+                  size: 18,
+                )
+              : Icon(
+                  Icons.done_outline,
+                  color: Colors.green,
+                  size: 18,
+                ),
+          Spacer(),
           IconButton(onPressed: widget.onDelete, icon: Icon(Icons.delete))
         ],
       ),
