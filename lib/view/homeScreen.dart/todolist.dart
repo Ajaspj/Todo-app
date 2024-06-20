@@ -1,52 +1,65 @@
 import 'package:flutter/material.dart';
-import 'package:task030424/controller/todocontroller.dart';
 
 class Listview extends StatefulWidget {
-  Listview({super.key, required this.todoitemKey, this.onDelete});
+  Listview(
+      {super.key,
+      required this.title,
+      this.onDelete,
+      required this.category,
+      this.onpress,
+      required this.isChecked});
 
-  final todoitemKey;
+  final String title;
   final void Function()? onDelete;
+  final void Function(bool?)? onpress;
+  final String category;
+  final bool isChecked;
   @override
   State<Listview> createState() => _ListviewState();
 }
 
 class _ListviewState extends State<Listview> {
-  bool isChecked = false;
-
   @override
   Widget build(BuildContext context) {
     return Container(
       child: Row(
         children: [
-          Checkbox(
-            value: isChecked,
-            onChanged: (value) {
-              setState(() {
-                isChecked = value!;
-              });
-            },
+          Checkbox(value: widget.isChecked, onChanged: widget.onpress),
+          SizedBox(
+            width: 20,
           ),
           Expanded(
             child: Text(
-              TodoController.getdata(widget.todoitemKey)!.title.toString(),
-              style: isChecked == false
-                  ? TextStyle(color: Colors.black, fontSize: 18)
+              widget.title,
+              style: widget.isChecked == false
+                  ? TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18)
                   : TextStyle(
-                      color: Colors.red,
+                      color: Colors.black,
                       decoration: TextDecoration.lineThrough,
-                      fontSize: 15),
+                      decorationColor: Colors.red,
+                      decorationThickness: 3,
+                      fontSize: 20),
             ),
           ),
-          isChecked == false
-              ? Icon(
-                  Icons.pending_actions,
-                  color: Colors.red,
-                  size: 18,
+          Text(widget.category),
+          SizedBox(
+            width: 10,
+          ),
+          widget.isChecked == false
+              ? Text(
+                  "Incompleted",
+                  style: TextStyle(
+                    color: Colors.red,
+                  ),
                 )
-              : Icon(
-                  Icons.done_outline,
-                  color: Colors.green,
-                  size: 18,
+              : Text(
+                  "Completed",
+                  style: TextStyle(
+                    color: Colors.green,
+                  ),
                 ),
           Spacer(),
           IconButton(onPressed: widget.onDelete, icon: Icon(Icons.delete))

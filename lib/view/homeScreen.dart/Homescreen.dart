@@ -11,8 +11,10 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  TextEditingController AddController = TextEditingController();
+  TextEditingController addcobtroller = TextEditingController();
   var formKey = GlobalKey<FormState>();
+  String? dropDownValue;
+
   @override
   void initState() {
     TodoController.initKey();
@@ -22,17 +24,14 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Colors.blueAccent,
         appBar: AppBar(
+          backgroundColor: Colors.blueAccent,
           leading: Icon(Icons.arrow_back),
-          actions: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Icon(
-                Icons.search,
-                size: 30,
-              ),
-            )
-          ],
+          title: Text("ToDo",
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 40)),
+          centerTitle: true,
+          actions: [Icon(Icons.search)],
         ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -41,70 +40,118 @@ class _HomeScreenState extends State<HomeScreen> {
               Expanded(
                 child: ListView.separated(
                     shrinkWrap: true,
-                    itemBuilder: (context, index) => Listview(
-                          todoitemKey: TodoController.todolistKey[index],
-                          onDelete: () async {
-                            await TodoController.deleteData(
-                                TodoController.todolistKey[index]);
-                            setState(() {});
-                          },
-                        ),
+                    itemBuilder: (context, index) {
+                      TodoModel todoModel = TodoController.getdata(
+                          TodoController.todolistKey[index])!;
+                      return Listview(
+                        isChecked: todoModel.isChecked,
+                        category: todoModel.category,
+                        title: todoModel.title,
+                        onpress: (value) async {
+                          todoModel.isChecked = value!;
+                          await TodoController.checkBox(
+                              TodoController.todolistKey[index], todoModel);
+                          setState(() {});
+                        },
+                        onDelete: () async {
+                          await TodoController.deleteData(
+                              TodoController.todolistKey[index]);
+                          setState(() {});
+                        },
+                      );
+                    },
                     separatorBuilder: (context, index) => SizedBox(
-                          height: 5,
+                          height: 20,
                         ),
                     itemCount: TodoController.todolistKey.length),
               ),
               Container(
-                margin: EdgeInsets.symmetric(vertical: 30, horizontal: 110),
+                margin: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
                 padding: EdgeInsets.all(5),
                 decoration: BoxDecoration(
-                    color: Colors.grey,
-                    borderRadius: BorderRadius.circular(30)),
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(20)),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Expanded(
                       child: Center(
-                        child: InkWell(
-                          onTap: () {
-                            AddController.clear();
-                            showDialog(
-                              context: context,
-                              builder: (context) => AlertDialog(
-                                title: Text("Add new"),
-                                content: Form(
-                                    key: formKey,
-                                    child: TextFormField(
-                                      controller: AddController,
-                                    )),
-                                actions: [
-                                  TextButton(
-                                      onPressed: () async {
-                                        if (formKey.currentState!.validate()) {
-                                          await TodoController.addData(
-                                              todomodel(
-                                                  title: AddController.text,
-                                                  iscompleted: false));
-                                          setState(() {});
-                                          Navigator.pop(context);
-                                        }
-                                      },
-                                      child: Text("Add"))
-                                ],
-                              ),
-                            );
-                          },
-                          child: Center(
-                            child: Text("Add new",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 20)),
-                          ),
-                        ),
+                        child: Text("Add to task",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 30)),
                       ),
                     ),
                     SizedBox(
-                      width: 10,
+                      width: 20,
+                    ),
+                    CircleAvatar(
+                      minRadius: 30,
+                      child: IconButton(
+                          onPressed: () {
+                            addcobtroller.clear();
+                            showDialog(
+                                context: context,
+                                builder: (context) => StatefulBuilder(
+                                      builder: (context, alertSetState) =>
+                                          AlertDialog(
+                                        title: Row(
+                                          children: [
+                                            Text("Add"),
+                                            SizedBox(
+                                              width: 10,
+                                            ),
+                                            DropdownButton(
+                                              hint: Text("Select"),
+                                              value: dropDownValue,
+                                              items: [
+                                                DropdownMenuItem(
+                                                  child: Text("Home"),
+                                                  value: "Home",
+                                                ),
+                                                DropdownMenuItem(
+                                                  child: Text("Work"),
+                                                  value: "Work",
+                                                ),
+                                              ],
+                                              onChanged: (value) {
+                                                alertSetState(() {
+                                                  dropDownValue = value;
+                                                });
+                                              },
+                                            )
+                                          ],
+                                        ),
+                                        content: Form(
+                                          key: formKey,
+                                          child: TextFormField(
+                                            controller: addcobtroller,
+                                          ),
+                                        ),
+                                        actions: [
+                                          TextButton(
+                                              onPressed: () async {
+                                                if (formKey.currentState!
+                                                    .validate()) {
+                                                  await TodoController.addData(
+                                                      TodoModel(
+                                                          title: addcobtroller
+                                                              .text,
+                                                          isChecked: false,
+                                                          category:
+                                                              dropDownValue!));
+                                                  setState(() {});
+                                                  Navigator.pop(context);
+                                                }
+                                              },
+                                              child: Text("Ok"))
+                                        ],
+                                      ),
+                                    ));
+                          },
+                          icon: Icon(Icons.add)),
                     ),
                   ],
                 ),

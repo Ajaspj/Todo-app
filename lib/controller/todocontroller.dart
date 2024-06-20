@@ -1,17 +1,17 @@
-import 'package:hive_flutter/adapters.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:task030424/model/todo_model.dart';
 
 class TodoController {
   static List todolistKey = [];
-
-  static var myBox = Hive.box<todomodel>('todo');
+  // hive ref
+  static var myBox = Hive.box<TodoModel>('todoBox');
 
   static deleteData(var Key) async {
     await myBox.delete(Key);
     initKey();
   }
 
-  static addData(todomodel item) async {
+  static addData(TodoModel item) async {
     await myBox.add(item);
     initKey();
   }
@@ -20,7 +20,12 @@ class TodoController {
     todolistKey = myBox.keys.toList();
   }
 
-  static todomodel? getdata(var key) {
+  static TodoModel? getdata(var key) {
     return myBox.get(key);
+  }
+
+  static checkBox(var key, TodoModel todoModel) async {
+    await myBox.put(key, todoModel);
+    initKey();
   }
 }

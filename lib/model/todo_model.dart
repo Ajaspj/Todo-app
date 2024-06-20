@@ -1,14 +1,16 @@
-import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+
 part 'todo_model.g.dart';
 
 @HiveType(typeId: 1)
-class todomodel {
+class TodoModel {
   @HiveField(0)
-  final String? title;
+  String title;
   @HiveField(1)
-  bool? iscompleted;
-  todomodel({
-    this.title,
-    this.iscompleted = false,
-  });
+  bool isChecked;
+  @HiveField(2)
+  String category;
+
+  TodoModel(
+      {required this.title, required this.isChecked, required this.category});
 }
